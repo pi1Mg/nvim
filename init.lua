@@ -264,7 +264,7 @@ local on_attach = function(_, bufnr)
   km(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   km(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   km(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  km(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  km(bufnr, 'n', '<leader>d', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   km(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   km(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   km(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
@@ -752,8 +752,8 @@ vim.g.edge_transparent_background = 0
 
 --Set statusbar
 vim.g.lightline = {
-  colorscheme = 'everforest',
-  -- colorscheme = 'one',
+  -- colorscheme = 'everforest',
+  colorscheme = 'one',
   -- colorscheme = 'gruvbox',
   -- colorscheme = 'edge',
   -- colorscheme = 'PaperColor',
@@ -765,9 +765,14 @@ vim.g.lightline = {
 }
 
 vim.o.background = 'light'
-vim.cmd [[colorscheme everforest]]
+-- vim.cmd [[colorscheme everforest]]
 -- vim.cmd [[colorscheme space-nvim]]
 -- vim.cmd [[colorscheme edge]]
--- vim.cmd [[colorscheme one-nvim]]
+vim.cmd [[colorscheme one-nvim]]
 -- vim.cmd [[colorscheme modus-operandi]]
 
+-- Quick and dirty, dealing with error color (red->gray).
+vim.api.nvim_exec([[ hi DiagnosticError guifg=DarkOrange ]], False)
+vim.api.nvim_exec([[ hi DiagnosticWarn guifg=Orange ]], False)
+vim.api.nvim_exec([[ hi DiagnosticInfo guifg=LightOrange ]], False)
+vim.api.nvim_exec([[ hi DiagnosticHint guifg=Gray ]], False)
