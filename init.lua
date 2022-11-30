@@ -77,9 +77,6 @@ require('packer').startup(function()
   use { 'rakr/vim-one' }
 end)
 
--- Using statusline, -- INSERT -- is not needed anymore
--- vim.o.noshowmode
-
 --Incremental live completion (note: this is now a default on master)
 vim.o.inccommand = 'nosplit'
 
@@ -298,41 +295,41 @@ for _, lsp in ipairs(servers) do
 end
 
 -- Example custom server
-local sumneko_root_path = vim.fn.getenv 'HOME' .. '/.local/bin/sumneko_lua' -- Change to your sumneko root installation
-local sumneko_binary = sumneko_root_path .. '/bin/linux/lua-language-server'
+-- local sumneko_root_path = vim.fn.getenv 'HOME' .. '/.local/bin/sumneko_lua' -- Change to your sumneko root installation
+-- local sumneko_binary = sumneko_root_path .. '/bin/linux/lua-language-server'
 
 -- Make runtime files discoverable to the server
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, 'lua/?.lua')
 table.insert(runtime_path, 'lua/?/init.lua')
 
-require('lspconfig').sumneko_lua.setup {
-  cmd = { sumneko_binary, '-E', sumneko_root_path .. '/main.lua' },
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-        -- Setup your lua path
-        path = runtime_path,
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = { 'vim' },
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file('', true),
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
-      },
-    },
-  },
-}
+-- require('lspconfig').sumneko_lua.setup {
+--   cmd = { sumneko_binary, '-E', sumneko_root_path .. '/main.lua' },
+--   on_attach = on_attach,
+--   capabilities = capabilities,
+--   settings = {
+--     Lua = {
+--       runtime = {
+--         -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+--         version = 'LuaJIT',
+--         -- Setup your lua path
+--         path = runtime_path,
+--       },
+--       diagnostics = {
+--         -- Get the language server to recognize the `vim` global
+--         globals = { 'vim' },
+--       },
+--       workspace = {
+--         -- Make the server aware of Neovim runtime files
+--         library = vim.api.nvim_get_runtime_file('', true),
+--       },
+--       -- Do not send telemetry data containing a randomized but unique identifier
+--       telemetry = {
+--         enable = false,
+--       },
+--     },
+--   },
+-- }
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -652,9 +649,9 @@ require'treesitter-context'.setup{
         },
         -- Patterns for specific filetypes
         -- If a pattern is missing, *open a PR* so everyone can benefit.
-        python = {
-            'def',
-        },
+        -- python = {
+        --     'def',
+        -- },
         tex = {
             'chapter',
             'section',
@@ -880,3 +877,7 @@ vim.cmd [[colorscheme catppuccin]]
 -- vim.api.nvim_exec([[ hi DiagnosticHint guifg=azure1 ]], False)
 
 -- vim.api.nvim_exec([[ hi Folded guibg=azure2 ]], False)
+
+-- Using statusline, -- INSERT -- is not needed anymore
+vim.cmd [[ set noshowmode ]]
+
