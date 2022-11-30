@@ -34,6 +34,8 @@ require('packer').startup(function()
   use 'nvim-treesitter/nvim-treesitter'
   -- Additional textobjects for treesitter
   use 'nvim-treesitter/nvim-treesitter-textobjects'
+  -- Get current scope on statusline
+  use 'nvim-treesitter/nvim-treesitter-context'
   use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
   use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
   use 'hrsh7th/cmp-nvim-lsp'
@@ -74,6 +76,9 @@ require('packer').startup(function()
   use { 'rose-pine/neovim' }
   use { 'rakr/vim-one' }
 end)
+
+-- Using statusline, -- INSERT -- is not needed anymore
+-- vim.o.noshowmode
 
 --Incremental live completion (note: this is now a default on master)
 vim.o.inccommand = 'nosplit'
@@ -616,6 +621,106 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
  }
 )
 
+-- nvim-treesitter-context fine tune.
+require'treesitter-context'.setup{
+    -- Enable this plugin (Can be enabled/disabled later via commands)
+    enable = true,
+    -- How many lines the window should span. Values <= 0 mean no limit.
+    max_lines = 0,
+    -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+    trim_scope = 'outer',
+    -- Minimum editor window height to enable context. Values <= 0 mean no limit
+    min_window_height = 0,
+    -- Match patterns for TS nodes. These get wrapped to match at word boundaries.
+    patterns = {
+        -- For all filetypes
+        -- Note that setting an entry here replaces all other patterns for this entry.
+        -- By setting the 'default' entry below, you can control which nodes you want to
+        -- appear in the context window.
+        default = {
+            'class',
+            'function',
+            'method',
+            'for',
+            'while',
+            'if',
+            'switch',
+            'case',
+            'interface',
+            'struct',
+            'enum',
+        },
+        -- Patterns for specific filetypes
+        -- If a pattern is missing, *open a PR* so everyone can benefit.
+        python = {
+            'def',
+        },
+        tex = {
+            'chapter',
+            'section',
+            'subsection',
+            'subsubsection',
+        },
+        haskell = {
+            'adt'
+        },
+        rust = {
+            'impl_item',
+
+        },
+        terraform = {
+            'block',
+            'object_elem',
+            'attribute',
+        },
+        scala = {
+            'object_definition',
+        },
+        vhdl = {
+            'process_statement',
+            'architecture_body',
+            'entity_declaration',
+        },
+        markdown = {
+            'section',
+        },
+        elixir = {
+            'anonymous_function',
+            'arguments',
+            'block',
+            'do_block',
+            'list',
+            'map',
+            'tuple',
+            'quoted_content',
+        },
+        json = {
+            'pair',
+        },
+        typescript = {
+            'export_statement',
+        },
+        yaml = {
+            'block_mapping_pair',
+        },
+    },
+    exact_patterns = {
+        -- Example for a specific filetype with Lua patterns
+        -- Treat patterns.rust as a Lua pattern (i.e "^impl_item$" will
+        -- exactly match "impl_item" only)
+        -- rust = true,
+    },
+
+    -- [!] The options below are exposed but shouldn't require your attention,
+    --     you can safely ignore them.
+
+    zindex = 20, -- The Z-index of the context window
+    mode = 'cursor',  -- Line used to calculate context. Choices: 'cursor', 'topline'
+    -- Separator between context and content. Should be a single character string, like '-'.
+    -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+    separator = nil,
+}
+
 -- Styling
 -- Catppuccino fine tune (check help for more options)
 require("catppuccin").setup({
@@ -747,10 +852,11 @@ vim.g.lightline = {
   -- colorscheme = 'one',
   -- colorscheme = 'gruvbox',
   -- colorscheme = 'edge',
-  colorscheme = 'PaperColor',
+  -- colorscheme = 'PaperColor',
   -- colorscheme = 'ayu_light',
   -- colorscheme = 'ayu_mirage',
   -- colorscheme = 'onedark',
+  colorscheme = 'catppuccin',
   active = { left = { { 'mode', 'paste' }, { 'gitbranch', 'readonly', 'filename', 'modified' } } },
   -- component_function = { gitbranch = 'fugitive#head' },
   component_function = { gitbranch = 'fugitive#Head' },
