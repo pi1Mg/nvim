@@ -60,6 +60,7 @@ require('packer').startup(function()
   use { 'NLKNguyen/papercolor-theme' } -- vim
   use { 'Th3Whit3Wolf/one-nvim' } -- vim
   use { 'jsit/toast.vim' } -- vim
+  use { 'ayu-theme/ayu-vim' } -- vim
   -- use { 'tjdevries/colorbuddy.vim' } -- vim
   -- use { 'Th3Whit3Wolf/onebuddy' } -- vim
   -- use { 'kaicataldo/material.vim', { 'branch': 'main' } }
@@ -67,7 +68,7 @@ require('packer').startup(function()
   use { 'Th3Whit3Wolf/space-nvim' }
   use { 'sainnhe/everforest' }
   use { 'sainnhe/edge' }
-  use { 'Pocco81/Catppuccino.nvim' }
+  use { 'Pocco81/Catppuccino.nvim', as = "catppuccin" }
   use { 'ishan9299/modus-theme-vim'}
   use { "adisen99/codeschool.nvim", requires = {"rktjmp/lush.nvim"} }
   use { 'rose-pine/neovim' }
@@ -136,6 +137,7 @@ vim.g.indent_blankline_filetype_exclude = { 'help', 'packer' }
 vim.g.indent_blankline_buftype_exclude = { 'terminal', 'nofile' }
 vim.g.indent_blankline_char_highlight = 'LineNr'
 vim.g.indent_blankline_show_trailing_blankline_indent = false
+vim.g.indent_blankline_show_first_indent_level = false
 
 -- Gitsigns
 require('gitsigns').setup {
@@ -279,7 +281,7 @@ end
 
 -- nvim-cmp supports additional completion capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Enable the following language servers
 local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
@@ -615,66 +617,51 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 )
 
 -- Styling
--- Catppuccino fine tune
--- local catppuccino = require("catppuccino")
+-- Catppuccino fine tune (check help for more options)
+require("catppuccin").setup({
+    flavour = "mocha", -- latte, frappe, macchiato, mocha
+    background = { -- :h background
+        light = "latte",
+        dark = "mocha",
+    },
+    transparent_background = false,
+    term_colors = false,
+    dim_inactive = {
+        enabled = true,
+        shade = "dark",
+        percentage = 0.15,
+    },
+    no_italic = false, -- Force no italic
+    no_bold = false, -- Force no bold
+    styles = {
+        comments = { "italic" },
+        conditionals = { "italic" },
+        loops = {},
+        functions = {},
+        keywords = {},
+        strings = {},
+        variables = {},
+        numbers = {},
+        booleans = {},
+        properties = {},
+        types = {},
+        operators = {},
+    },
+    color_overrides = {},
+    custom_highlights = {},
+    integrations = {
+        cmp = true,
+        gitsigns = true,
+        nvimtree = true,
+        telescope = true,
+        notify = false,
+        mini = false,
+        -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
+    },
+})
 
--- configure it
--- catppuccino.setup(
---     {
--- 		colorscheme = "light_melya",
--- 		transparency = false,
--- 		term_colors = false,
--- 		styles = {
--- 			comments = "italic",
--- 			functions = "italic",
--- 			keywords = "italic",
--- 			strings = "NONE",
--- 			variables = "NONE",
--- 		},
--- 		integrations = {
--- 			treesitter = true,
--- 			native_lsp = {
--- 				enabled = true,
--- 				virtual_text = {
--- 					errors = "italic",
--- 					hints = "italic",
--- 					warnings = "italic",
--- 					information = "italic",
--- 				},
--- 				underlines = {
--- 					errors = "underline",
--- 					hints = "underline",
--- 					warnings = "underline",
--- 					information = "underline",
--- 				}
--- 			},
--- 			lsp_trouble = false,
--- 			lsp_saga = false,
--- 			gitgutter = true,
--- 			gitsigns = true,
--- 			telescope = true,
--- 			nvimtree = {
--- 				enabled = true,
--- 				show_root = true,
--- 			},
--- 			which_key = false,
--- 			indent_blankline = {
--- 				enabled = true,
--- 				colored_indent_levels = true,
--- 			},
--- 			dashboard = false,
--- 			neogit = false,
--- 			vim_sneak = false,
--- 			fern = false,
--- 			barbar = false,
--- 			bufferline = false,
--- 			markdown = true,
--- 			lightspeed = false,
--- 			ts_rainbow = true,
--- 			hop = false,
--- 		}
--- 	}
--- )
+-- setup must be called before loading
+vim.cmd.colorscheme "catppuccin"
 
 -- Fine tune colorcode.
 -- Load and setup function to choose plugin and language highlights
@@ -750,29 +737,40 @@ vim.g.everforest_show_eob = 1
 -- Fine tune edge.
 vim.g.edge_transparent_background = 0
 
+-- Fine tune ayu.
+vim.cmd [[ let ayucolor="dark" ]]
+-- vim.cmd [[ let ayucolor="mirage" ]]
+
 --Set statusbar
 vim.g.lightline = {
   -- colorscheme = 'everforest',
-  colorscheme = 'one',
+  -- colorscheme = 'one',
   -- colorscheme = 'gruvbox',
   -- colorscheme = 'edge',
-  -- colorscheme = 'PaperColor',
+  colorscheme = 'PaperColor',
   -- colorscheme = 'ayu_light',
+  -- colorscheme = 'ayu_mirage',
+  -- colorscheme = 'onedark',
   active = { left = { { 'mode', 'paste' }, { 'gitbranch', 'readonly', 'filename', 'modified' } } },
   -- component_function = { gitbranch = 'fugitive#head' },
   component_function = { gitbranch = 'fugitive#Head' },
   -- component_function = { gitbranch = 'FugitiveHead' },
 }
 
-vim.o.background = 'light'
+-- vim.o.background = 'light'
+vim.o.background = 'dark'
 -- vim.cmd [[colorscheme everforest]]
 -- vim.cmd [[colorscheme space-nvim]]
 -- vim.cmd [[colorscheme edge]]
-vim.cmd [[colorscheme one-nvim]]
+-- vim.cmd [[colorscheme one-nvim]]
 -- vim.cmd [[colorscheme modus-operandi]]
+vim.cmd [[colorscheme catppuccin]]
+-- vim.cmd [[colorscheme ayu]]
 
 -- Quick and dirty, dealing with error color (red->gray).
-vim.api.nvim_exec([[ hi DiagnosticError guifg=DarkOrange ]], False)
-vim.api.nvim_exec([[ hi DiagnosticWarn guifg=Orange ]], False)
-vim.api.nvim_exec([[ hi DiagnosticInfo guifg=LightOrange ]], False)
-vim.api.nvim_exec([[ hi DiagnosticHint guifg=Gray ]], False)
+-- vim.api.nvim_exec([[ hi DiagnosticError guifg=azure4 ]], False)
+-- vim.api.nvim_exec([[ hi DiagnosticWarn guifg=azure3 ]], False)
+-- vim.api.nvim_exec([[ hi DiagnosticInfo guifg=azure2 ]], False)
+-- vim.api.nvim_exec([[ hi DiagnosticHint guifg=azure1 ]], False)
+
+-- vim.api.nvim_exec([[ hi Folded guibg=azure2 ]], False)
